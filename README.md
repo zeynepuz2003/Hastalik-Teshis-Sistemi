@@ -1,1 +1,1 @@
-# Hastal-k-Te-his-Sistemi
+# Hastalik Teshis Sistemi
