@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hastalık Teşhis Uzman Sistemi</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<!-- ── HEADER ──────────────────────────────────────────────────────────── -->
+<header>
+  <div class="header-inner">
+    <div class="header-icon">⚕</div>
+    <div>
+      <h1>Hastalık Teşhis Uzman Sistemi</h1>
+      <p class="subtitle">Yapay Zeka Temelli Tıbbi Karar Destek Sistemi &nbsp;·&nbsp;
+        FOL + Modus Ponens &nbsp;·&nbsp; Bayesian Çıkarım &nbsp;·&nbsp; Hill Climbing
+      </p>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN LAYOUT ─────────────────────────────────────────────────────── -->
+<main>
+
+  <!-- LEFT: Symptom Selector -->
+  <section class="panel symptoms-panel">
+    <div class="panel-header">
+      <span class="panel-icon">🔍</span>
+      <h2>Belirti Seçimi</h2>
+    </div>
+    <p class="hint">Hastada gözlemlenen belirtileri seçiniz:</p>
+    <div id="symptom-counter" class="counter">0 belirti seçildi</div>
+
+    {% for group, symptoms in symptom_groups.items() %}
+    <div class="symptom-group">
+      <div class="group-label">{{ group }}</div>
+      <div class="symptom-grid">
+        {% for s in symptoms %}
+        <label class="symptom-chip" data-key="{{ s.key }}">
+          <input type="checkbox" value="{{ s.key }}" onchange="onSymptomChange()" />
+          {{ s.label }}
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+
+    <button id="diagnose-btn" class="btn-diagnose" onclick="diagnose()">
+      <span id="btn-text">Teşhis Yap</span>
+      <span id="btn-spinner" class="spinner hidden"></span>
+    </button>
+    <button class="btn-clear" onclick="clearAll()">Temizle</button>
+  </section>
+
+  <!-- RIGHT: Results -->
+  <section class="panel results-panel" id="results-panel">
+
+    <!-- Placeholder -->
+    <div id="placeholder" class="placeholder">
+      <div class="placeholder-icon">🩺</div>
+      <p>Belirtileri seçip <strong>Teşhis Yap</strong> butonuna basın.</p>
+    </div>
+
+    <!-- Results (hidden until diagnosis) -->
+    <div id="results-content" class="hidden">
+
+      <!-- Top Diagnoses -->
+      <div class="section-title">
+        <span>📊</span> Teşhis Sonuçları
+        <span id="rules-badge" class="badge"></span>
+      </div>
+      <div id="diagnoses-list"></div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('logic')">🧠 Mantık Çıkarımı</button>
+        <button class="tab" onclick="switchTab('math')">📐 Matematik</button>
+        <button class="tab" onclick="switchTab('opt')">🏔 Optimizasyon</button>
+      </div>
+
+      <!-- Tab: Logic -->
+      <div id="tab-logic" class="tab-content active">
+        <div class="section-title sub"><span>⚡</span> Ateşlenen Mantık Kuralları (Modus Ponens)</div>
+        <div id="logic-rules-list"></div>
+        <div class="section-title sub" style="margin-top:16px"><span>🔗</span> Modus Ponens Zincirleri</div>
+        <pre id="mp-chains" class="code-block"></pre>
+      </div>
+
+      <!-- Tab: Math -->
+      <div id="tab-math" class="tab-content hidden">
+        <div class="section-title sub"><span>🔢</span> Matematiksel Analiz</div>
+        <div id="math-grid" class="math-grid"></div>
+        <div class="section-title sub" style="margin-top:16px"><span>🎯</span> Skor Detayları (İlk 5)</div>
+        <div id="math-scores-table"></div>
+      </div>
+
+      <!-- Tab: Optimization -->
+      <div id="tab-opt" class="tab-content hidden">
+        <div class="section-title sub"><span>📈</span> Hill Climbing İterasyonları</div>
+        <canvas id="opt-chart" height="180"></canvas>
+        <div id="opt-stats" class="opt-stats"></div>
+        <div class="section-title sub" style="margin-top:16px"><span>⚖️</span> Optimize Edilmiş Belirti Ağırlıkları</div>
+        <div id="weights-chart"></div>
+      </div>
+
+    </div><!-- /results-content -->
+  </section>
+
+</main>
+
+<!-- ── FOOTER ──────────────────────────────────────────────────────────── -->
+<footer>
+  Principles of AI — Grup Projesi &nbsp;·&nbsp;
+  18 Hastalık &nbsp;·&nbsp; 29 Belirti &nbsp;·&nbsp; 24 FOL Kuralı
+</footer>
+
+<script src="/static/script.js"></script>
+</body>
+</html>
